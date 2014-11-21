@@ -1,0 +1,104 @@
+链表版
+#include <vector>
+usingnamespace std;
+template<typename T,typename container>
+class stack
+{
+public:
+bool empty( ) const
+{
+return len==0;
+}
+
+//出栈
+void pop( )
+{
+if(empty( ))
+{
+thrownew exception("栈中没有数据");
+}
+
+if(head->next==cur)//删除第一个元素
+{
+delete cur;
+head->next=NULL;
+}else{ //删除最后一个元素
+node *tmp=head->next;
+//将指针移到最后第二个元素
+for(int i=2;i<len;i++)//对比把for循环写成for(int i=0;i<len-2;i++)
+{ 
+tmp=tmp->next;
+}
+delete tmp->next; //析构最后一个元素
+cur=tmp;//将指针指到现在的最后一个元素
+} 
+--len;//元素个数减一
+}
+
+//出栈，如果默认数组未满继续添加数据，如果已满，重新分配一个两倍的数组，
+//把默认数组中的数据拷贝过来，释放默认数组,将指针指向新数组
+void push(const T& val)
+{
+node *tmp=new node(val);//新建节点
+cur->next=tmp;//将当前节点的下一个节点指向新增节点
+cur=tmp;//当前节点指向新节点
+++len;//节点个数加1
+}
+
+int size( ) const
+{
+return len;
+}
+
+stack( ) 
+{
+initialize();
+}
+
+//析构
+~stack()
+{
+delete head;
+}
+
+explicit stack(const container& cont)
+{ 
+initialize();
+//cont.begin()是常量类型，所以这里只能用vector <int>::const_iterator而不能用vector <int>::iterator
+vector <int>::const_iterator iter=cont.begin();
+while(iter!=cont.end())
+{
+push(*iter);
+iter++;
+}
+}
+
+T& top( )
+{
+return cur->val;
+}
+
+const T& top( ) const
+{
+return cur->val;
+}
+
+protected :
+typedef struct node1
+{
+node1 *next;
+T val;
+node1(T v):val(v),next(NULL){} 
+}node;
+
+private :
+int len;//元素个数
+node *head;//表头节点
+node *cur;//当前节点
+void initialize()
+{
+head=new node(-1);
+cur=head;
+len=0;
+}
+};
