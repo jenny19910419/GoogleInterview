@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int searchInsert(int A[], int n, int target) {
+        int start = 0, end = n-1;
+        //even if there is only one element, I may still insert the element after it
+        //I want to make start>end, and jump out of the loop, I return start as the position which I should insert the element
+        while(start<=end) {
+            int mid = start+(end-start)/2;
+            if(A[mid]==target) return mid;
+            else if(A[mid] > target) {
+                end = mid-1;
+            }
+            else {
+                start=mid+1;
+            }
+        }
+        return start;
+    }
+};
